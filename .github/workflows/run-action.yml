@@ -1,0 +1,16 @@
+name: Publish build metadata
+on:
+  push:
+
+jobs:
+  run-it:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'With input'
+        uses: ./action
+        with:
+          commit_msg: "My message"
+      
+      - name: 'No input'
+        uses: ./action

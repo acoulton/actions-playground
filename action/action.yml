@@ -1,0 +1,14 @@
+name: 'Debug inputs'
+description: 'Show what happens to inputs'
+inputs:
+  commit_msg:
+    description: 'The commit message'
+    default: ${{github.event.head_commit.message}}
+
+runs:
+  using: 'composite'
+  steps:
+
+  - name: 'Info'
+    shell: bash
+    run: echo "${{ inputs.commit_msg }}"
