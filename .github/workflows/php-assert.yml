@@ -3,31 +3,24 @@ name: Push-playground
 on:
   push:
     branches: "*"
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version:
-          - "7.2"
-          - "7.3"
-          - "7.4"
-          - "8.0"
+    permissions: 
+     id-token: write
           
     steps:
-      - uses: actions/checkout@v2
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+      
+      - name: Checkout actions-oidc-debugger
+        uses: actions/checkout@v4
         with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: "pdo, pdo_sqlite"
-          coverage: "pcov"
-          ini-values: "zend.assertions=1"
-          
-      - name: Debug php config
-        run: |
-          php -i | grep assert
-          php -r 'assert(false);'
-          echo "Exit code $?"
+          repository: github/actions-oidc-debugger
+          ref: main
+          path: ./.github/actions/actions-oidc-debugger
+
+      - name: Debug OIDC Claims
+        uses: ./.github/actions/actions-oidc-debugger
+        with:
+          audience: '${{ github.server_url }}/${{ github.repository_owner }}'
