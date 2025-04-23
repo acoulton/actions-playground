@@ -49,7 +49,7 @@ jobs:
 
             core.info(`No existing PR - starting new branch ${newBranch}`)
             core.setOutput('exists', 'false')
-            core.setOutput('checkout_branch', 'do-update')
+            core.setOutput('checkout_branch', 'do-my-update')
             core.setOutput('commit_branch', newBranch)
           }
 
