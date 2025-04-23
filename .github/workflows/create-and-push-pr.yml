@@ -23,10 +23,6 @@ jobs:
       with:
         ref: ${{ steps.check-existing-branch.outputs.checkout_branch }}
 
-    - name: Create update branch if required
-      if: steps.check-existing-branch.outputs.exists == 'false'
-      run: git checkout -b do-update
-
     - name: Make a commit msg
       id: msg
       run: |
@@ -45,23 +41,11 @@ jobs:
         echo $date >> test.txt
         echo "date=$date" >> $GITHUB_OUTPUT
 
-    - name: Autocommit (no changes)
-      id: commit
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        branch: do-update
-        commit_message: ${{ steps.msg.outputs.commit_msg }}
-        commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
-
-    - name: Open or update PR
-      if: steps.commit.outputs.changes_detected == 'true'
+    - name: Commit & push
+      if: true
       env:
         GH_TOKEN: ${{ github.token }}
-      run: |
-        if [ "${{steps.check-existing-branch.outputs.exists}}" == 'true' ]; then
-          gh pr create \
-            --title="Do an automated thing ${{steps.changes.outputs.date}}" \
-            --body="Automated things"
-        else
-          gh pr edit --title="Do an automated thing ${{steps.changes.outputs.date}}"
-        fi
+        BRANCH_NAME: do-update
+        PR_EXISTS: ${{ steps.check-existing-branch.outputs.exists }}
+        PR_TITLE: Do an automated thing ${{steps.changes.outputs.date}}
+      run: .github/commit-and-push.sh
