@@ -58,7 +58,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        if [ "${{steps.check-existing-branch.outputs.exists}}" == 'false' ]; then
+        if [ "${{steps.check-existing-branch.outputs.exists}}" == 'true' ]; then
           gh pr create \
             --title="Do an automated thing ${{steps.changes.outputs.date}}" \
             --body="Automated things"
