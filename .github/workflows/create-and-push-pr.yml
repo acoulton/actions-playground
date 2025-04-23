@@ -1,0 +1,24 @@
+on:
+  push:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Attempt to checkout existing branch
+      id: checkout-cucumber-update
+      continue-on-error: true
+      uses: actions/checkout@v4
+      with:
+        ref: cucumber-update
+
+    - name: Fallback to master branch
+      if: steps.checkout-cucumber-update.outcome == 'failure'
+      uses: actions/checkout@v4
+      with:
+        ref: main
+
+    - name: Create cucumber-update branch if required
+      if: steps.checkout-cucumber-update.outcome == 'failure'
+      run: git checkout -b cucumber-update
