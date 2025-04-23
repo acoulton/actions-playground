@@ -16,7 +16,7 @@ jobs:
           echo "checkout_branch=do-update" >> $GITHUB_OUTPUT
         else
           echo "exists=false" >> $GITHUB_OUTPUT
-          echo "checkout_branch=main" >> $GITHUB_OUTPUT
+          echo "checkout_branch=do-my-update" >> $GITHUB_OUTPUT
         fi
 
     - uses: actions/checkout@v4
