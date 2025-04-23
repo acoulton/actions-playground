@@ -42,7 +42,7 @@ jobs:
       id: changes
       run: |
         date=`date`
-        # echo $date >> test.txt
+        echo $date >> test.txt
         echo "date=$date" >> $GITHUB_OUTPUT
 
     - name: Autocommit (no changes)
