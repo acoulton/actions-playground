@@ -20,21 +20,23 @@ jobs:
             }
           )
           for await (const response of iterator) {
-            for (const pr of response.data) {
+            console.log(response)
+            console.log(response.data)
+            for (const pr in response.data) {
               console.log(pr)
             }
           }
-
-      run: |
-        set +o errexit
-        git ls-remote --exit-code --heads "https://github.com/acoulton/actions-playground.git" "do-update"
-        if [ $? -eq 0 ]; then
-          echo "exists=true" >> $GITHUB_OUTPUT
-          echo "checkout_branch=do-update" >> $GITHUB_OUTPUT
-        else
-          echo "exists=false" >> $GITHUB_OUTPUT
-          echo "checkout_branch=do-my-update" >> $GITHUB_OUTPUT
-        fi
+#
+#      run: |
+#        set +o errexit
+#        git ls-remote --exit-code --heads "https://github.com/acoulton/actions-playground.git" "do-update"
+#        if [ $? -eq 0 ]; then
+#          echo "exists=true" >> $GITHUB_OUTPUT
+#          echo "checkout_branch=do-update" >> $GITHUB_OUTPUT
+#        else
+#          echo "exists=false" >> $GITHUB_OUTPUT
+#          echo "checkout_branch=do-my-update" >> $GITHUB_OUTPUT
+#        fi
 
     - uses: actions/checkout@v4
       with:
