@@ -42,7 +42,7 @@ jobs:
         echo "date=$date" >> $GITHUB_OUTPUT
 
     - name: Commit & push
-      if: true
+      if: false
       env:
         GH_TOKEN: ${{ github.token }}
         BRANCH_NAME: do-update
