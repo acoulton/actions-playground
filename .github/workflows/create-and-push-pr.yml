@@ -12,7 +12,7 @@ jobs:
       with:
         script: |
           const iterator = github.paginate.iterator(
-            github.rest.pulls.listForRepo,
+            github.rest.pulls.list,
             {
               owner: 'acoulton',
               repo: 'actions-playground',
@@ -22,7 +22,7 @@ jobs:
           for await (const response of iterator) {
             console.log(response)
             console.log(response.data)
-            for (const pr in response.data) {
+            for (const pr of response.data) {
               console.log(pr)
             }
           }
