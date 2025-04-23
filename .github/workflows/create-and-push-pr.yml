@@ -52,10 +52,11 @@ jobs:
         branch: do-update
         commit_message: ${{ steps.msg.outputs.commit_msg }}
         commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
-        create_branch: true
 
     - name: Open or update PR
       if: steps.commit.outputs.changes_detected == 'true'
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         if [ "${{steps.check-existing-branch.ouputs.exists}}" == 'false' ]; then
           gh pr create \
