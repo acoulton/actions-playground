@@ -30,7 +30,7 @@ jobs:
     - name: Make a commit msg
       id: msg
       run: |
-        echo 'commit_msg=<<<ENDOFVAR' >> $GITHUB_OUTPUT
+        echo 'commit_msg=<<ENDOFVAR' >> $GITHUB_OUTPUT
         echo 'Do a commit' >> $GITHUB_OUTPUT
         echo '' >> $GITHUB_OUTPUT
         echo 'With multiple lines' >> $GITHUB_OUTPUT
