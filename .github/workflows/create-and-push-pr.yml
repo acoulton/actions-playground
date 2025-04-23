@@ -26,3 +26,31 @@ jobs:
     - name: Create update branch if required
       if: steps.check-existing-branch.outputs.exists == 'false'
       run: git checkout -b do-update
+
+    - name: Make a commit msg
+      id: msg
+      run: |
+        echo 'commit_msg=<<<ENDOFVAR' >> $GITHUB_OUTPUT
+        echo 'Do a commit' >> $GITHUB_OUTPUT
+        echo '' >> $GITHUB_OUTPUT
+        echo 'With multiple lines' >> $GITHUB_OUTPUT
+        echo 'ENDOFVAR' >> $GITHUB_OUTPUT
+
+    - name: Autocommit (no changes)
+      id: commit
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: ${{ steps.msg.outputs.commit_msg }}
+        commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
+        create_branch: true
+
+    - name: Open or update PR
+      if: steps.commit.outputs.changes_detected == 'true'
+      run: |
+        if [ "${{steps.check-existing-branch.ouputs.exists}}" == 'false' ]; then
+          gh pr create \
+            --title="Do an automated thing" \
+            --body="Automated things"
+        else
+          gh pr edit --title="Do an automated thing"
+        fi
