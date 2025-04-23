@@ -22,13 +22,18 @@ jobs:
             )
             for await (const response of iterator) {
               for (const pr of response.data) {
-                if (pr.head.ref.startsWith('do-update-')) {
-                  core.info(`Found existing PR ${pr.number} for ${pr.head.ref}`)
-                  return {
-                    exists: 'true',
-                    checkout_branch: pr.head.ref,
-                    commit_branch: pr.head.ref
-                  }
+                if (pr.head.full_name !== 'acoulton/actions-playground') {
+                  continue;
+                }
+                if ( ! pr.head.ref.startsWith('do-update-')) {
+                  continue;
+                }
+
+                core.info(`Found existing PR ${pr.number} for ${pr.head.ref}`)
+                return {
+                  exists: 'true',
+                  checkout_branch: pr.head.ref,
+                  commit_branch: pr.head.ref
                 }
               }
             }
