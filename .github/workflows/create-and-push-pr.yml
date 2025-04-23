@@ -49,6 +49,7 @@ jobs:
       id: commit
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
+        branch: do-update
         commit_message: ${{ steps.msg.outputs.commit_msg }}
         commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
         create_branch: true
