@@ -22,7 +22,7 @@ jobs:
             )
             for await (const response of iterator) {
               for (const pr of response.data) {
-                if (pr.head.full_name !== 'acoulton/actions-playground') {
+                if (pr.head.repo.full_name !== 'acoulton/actions-playground') {
                   continue;
                 }
                 if ( ! pr.head.ref.startsWith('do-update-')) {
