@@ -38,6 +38,13 @@ jobs:
           echo 'ENDOFVAR'
         } >> $GITHUB_OUTPUT
 
+    - name: Do some changes
+      id: changes
+      run: |
+        date=`date`
+        echo $date >> test.txt
+        echo "date=$date" >> $GITHUB_OUTPUT
+
     - name: Autocommit (no changes)
       id: commit
       uses: stefanzweifel/git-auto-commit-action@v5
@@ -51,8 +58,8 @@ jobs:
       run: |
         if [ "${{steps.check-existing-branch.ouputs.exists}}" == 'false' ]; then
           gh pr create \
-            --title="Do an automated thing" \
+            --title="Do an automated thing ${{steps.changes.outputs.date}}" \
             --body="Automated things"
         else
-          gh pr edit --title="Do an automated thing"
+          gh pr edit --title="Do an automated thing ${{steps.changes.outputs.date}}"
         fi
