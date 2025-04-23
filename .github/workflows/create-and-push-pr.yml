@@ -31,7 +31,7 @@ jobs:
       id: msg
       run: |
         {
-          echo 'commit_msg=<<ENDOFVAR'
+          echo 'commit_msg<<ENDOFVAR'
           echo 'Do a commit'
           echo ''
           echo 'With multiple lines'
