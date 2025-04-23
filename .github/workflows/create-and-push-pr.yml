@@ -46,6 +46,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
         BRANCH_NAME: do-update
+        COMMIT_MSG: ${{ steps.msg.outputs.commit_msg }}
         PR_EXISTS: ${{ steps.check-existing-branch.outputs.exists }}
         PR_TITLE: Do an automated thing ${{steps.changes.outputs.date}}
       run: .github/commit-and-push.sh
