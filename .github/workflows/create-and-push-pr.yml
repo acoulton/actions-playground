@@ -8,6 +8,23 @@ jobs:
 
     - name: Check if update branch already exists
       id: check-existing-branch
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const iterator = github.paginate.iterator(
+            github.rest.pulls.listForRepo,
+            {
+              owner: 'acoulton',
+              repo: 'actions-playground',
+              state: 'open'
+            }
+          )
+          for await (const response of iterator) {
+            for (const pr of response.data) {
+              console.log(pr)
+            }
+          }
+
       run: |
         set +o errexit
         git ls-remote --exit-code --heads "https://github.com/acoulton/actions-playground.git" "do-update"
@@ -42,7 +59,7 @@ jobs:
         echo "date=$date" >> $GITHUB_OUTPUT
 
     - name: Commit & push
-      if: true
+      if: false
       env:
         GH_TOKEN: ${{ github.token }}
         BRANCH_NAME: do-update
