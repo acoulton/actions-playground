@@ -11,47 +11,47 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          async function findBranchDetails() {
-            const iterator = github.paginate.iterator(
-              github.rest.pulls.list,
-              {
-                owner: 'acoulton',
-                repo: 'actions-playground',
-                state: 'open'
-              }
-            )
+          async function findOpenPR({owner, repo, branchPrefix}) {
+            const iterator = github.paginate.iterator(github.rest.pulls.list, {owner, repo, state: 'open'})
+            const repoFullName = `${owner}/${repo}`
+
             for await (const response of iterator) {
-              for (const pr of response.data) {
-                if (pr.head.repo.full_name !== 'acoulton/actions-playground') {
-                  continue;
-                }
-                if ( ! pr.head.ref.startsWith('do-update-')) {
-                  continue;
-                }
+              const matchingPR = response.data.find((pr) => (
+                pr.head.ref.startsWith(branchPrefix)
+                && (pr.head.repo.full_name === repoFullName)
+              ))
 
-                core.info(`Found existing PR ${pr.number} for ${pr.head.ref}`)
-                return {
-                  exists: 'true',
-                  checkout_branch: pr.head.ref,
-                  commit_branch: pr.head.ref
-                }
+              if (matchingPR) {
+                return matchingPR
               }
             }
 
-            const timestamp = Math.floor(Date.now() / 1000)
-            const newBranch = `do-update-${timestamp}`
-            core.info(`No existing PR - starting new branch ${newBranch}`)
-            return {
-              exists: 'false',
-              checkout_branch: 'do-my-update',
-              commit_branch: newBranch,
-            }
+            // No existing PRs
+            return false
           }
 
-          const result = await findBranchDetails();
-          core.setOutput('exists', result.exists)
-          core.setOutput('checkout_branch', result.checkout_branch)
-          core.setOutput('commit_branch', result.commit_branch)
+          const branchPrefix = 'do-update-'
+
+          const pr = await findOpenPR({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            branchPrefix
+          })
+
+          if (pr) {
+            core.info(`Found existing PR ${pr.number} for ${pr.head.ref}`)
+            core.setOutput('exists', 'true')
+            core.setOutput('checkout_branch', pr.head.ref)
+            core.setOutput('commit_branch', pr.head.ref)
+          } else {
+            const timestamp = Math.floor(Date.now() / 1000)
+            const newBranch = `do-update-${timestamp}`
+
+            core.info(`No existing PR - starting new branch ${newBranch}`)
+            core.setOutput('exists', 'false')
+            core.setOutput('checkout_branch', 'do-update')
+            core.setOutput('commit_branch', newBranch)
+          }
 
     - run: |
         echo "Exists: ${{ steps.check-existing-branch.outputs.exists }}"
@@ -81,7 +81,7 @@ jobs:
         echo "date=$date" >> $GITHUB_OUTPUT
 
     - name: Commit & push
-      if: true
+      if: false
       env:
         GH_TOKEN: ${{ github.token }}
         BRANCH_NAME: ${{ steps.check-existing-branch.outputs.commit_branch }}
