@@ -6,19 +6,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Attempt to checkout existing branch
-      id: checkout-cucumber-update
-      continue-on-error: true
-      uses: actions/checkout@v4
-      with:
-        ref: cucumber-update
+    - name: Check if update branch already exists
+      id: check-existing-branch
+      run: |
+        set +o errexit
+        git ls-remote --exit-code --heads "https://github.com/acoulton/actions-playground.git" "do-update"
+        if [ $? -eq 0 ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+          echo "checkout_branch=do-update" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+          echo "checkout_branch=master" >> $GITHUB_OUTPUT
+        fi
 
-    - name: Fallback to master branch
-      if: steps.checkout-cucumber-update.outcome == 'failure'
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
       with:
-        ref: main
+        ref: ${{ steps.check-existing-branch.outputs.checkout_branch }}
 
-    - name: Create cucumber-update branch if required
-      if: steps.checkout-cucumber-update.outcome == 'failure'
-      run: git checkout -b cucumber-update
+    - name: Create update branch if required
+      if: steps.check-existing-branch.outputs.exists == 'false'
+      run: git checkout -b do-update
