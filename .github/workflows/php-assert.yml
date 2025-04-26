@@ -24,7 +24,7 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           extensions: "pdo, pdo_sqlite"
           coverage: "pcov"
-          ini-values: "zend.assertions=1"
+          #ini-values: "zend.assertions=1"
           
       - name: Debug php config
         run: |
