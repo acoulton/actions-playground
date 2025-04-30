@@ -16,7 +16,7 @@ git -c user.name='github-actions[bot]' \
 
 echo "Authenticating and pushing"
 gh auth status
-gh auth setup-git
+GH_DEBUG=1 gh auth setup-git
 gh auth status
 git push -u origin "$BRANCH_NAME"
 
