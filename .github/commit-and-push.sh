@@ -28,6 +28,7 @@ git config --list
 set -o errexit
 
 echo "Setup git"
+GH_DEBUG=1 gh auth login
 GH_DEBUG=1 gh auth setup-git
 git remote -v
 
