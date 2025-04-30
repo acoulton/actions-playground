@@ -23,6 +23,8 @@ git remote -v
 echo "Config"
 set +o errexit
 git config --global --list
+echo "Local"
+git config --list
 set -o errexit
 
 echo "Setup git"
@@ -34,6 +36,8 @@ set +o errexit
 git config --global --list
 set -o errexit
 
+echo "Local"
+git config --list
 
 echo "Status"
 gh auth status
