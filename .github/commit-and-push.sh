@@ -16,6 +16,8 @@ git -c user.name='github-actions[bot]' \
 
 echo "Authenticating and pushing"
 gh auth status
+git remote -v
+git config --global --list
 GH_DEBUG=1 gh auth setup-git
 git remote -v
 git config --global --list
