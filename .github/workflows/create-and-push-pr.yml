@@ -82,7 +82,7 @@ jobs:
 
     - name: Commit & push
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ secrets.TMP_PAT }}
         BRANCH_NAME: ${{ steps.check-existing-branch.outputs.commit_branch }}
         COMMIT_MSG: ${{ steps.msg.outputs.commit_msg }}
         PR_EXISTS: ${{ steps.check-existing-branch.outputs.exists }}
