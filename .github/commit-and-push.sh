@@ -14,8 +14,9 @@ git -c user.name='github-actions[bot]' \
     commit \
     -m "$COMMIT_MSG"
 
-echo "Authenticating and pushing"
+echo "Authenticating"
 gh auth status
+echo "Status done"
 
 echo "Remotes"
 git remote -v
