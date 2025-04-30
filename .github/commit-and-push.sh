@@ -14,6 +14,8 @@ git -c user.name='github-actions[bot]' \
     commit \
     -m "$COMMIT_MSG"
 
+gh version
+
 echo "Authenticating"
 gh auth status
 echo "Status done"
