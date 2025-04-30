@@ -20,12 +20,20 @@ echo "Status done"
 
 echo "Remotes"
 git remote -v
+echo "Config"
+set +o errexit
 git config --global --list
+set -o errexit
 
 echo "Setup git"
 GH_DEBUG=1 gh auth setup-git
 git remote -v
+
+echo "Config"
+set +o errexit
 git config --global --list
+set -o errexit
+
 
 echo "Status"
 gh auth status
