@@ -64,6 +64,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ steps.check-existing-branch.outputs.checkout_branch }}
+        persist-credentials: 'false'
 
     - name: Make a commit msg
       id: msg
