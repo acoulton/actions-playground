@@ -19,3 +19,4 @@ jobs:
       - uses: reviewdog/action-actionlint@v1
         with:
           fail_level: 'any'
+          filter_mode: 'nofilter'
