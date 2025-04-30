@@ -16,11 +16,17 @@ git -c user.name='github-actions[bot]' \
 
 echo "Authenticating and pushing"
 gh auth status
+
+echo "Remotes"
 git remote -v
 git config --global --list
+
+echo "Setup git"
 GH_DEBUG=1 gh auth setup-git
 git remote -v
 git config --global --list
+
+echo "Status"
 gh auth status
 git push -u origin "$BRANCH_NAME"
 
