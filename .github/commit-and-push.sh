@@ -15,7 +15,9 @@ git -c user.name='github-actions[bot]' \
     -m "$COMMIT_MSG"
 
 echo "Authenticating and pushing"
+gh auth status
 gh auth setup-git
+gh auth status
 git push -u origin "$BRANCH_NAME"
 
 if [ "$PR_EXISTS" == 'false' ]; then
