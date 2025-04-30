@@ -2,8 +2,8 @@ name: Lint Actions
 
 on:
   pull_request:
-    paths:
-      - '.github/workflows/*.yml'
+#    paths:
+#      - '.github/workflows/*.yml'
   push:
     branches:
       - master
