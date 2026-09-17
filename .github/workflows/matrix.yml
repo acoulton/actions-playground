@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Defaults for all jobs, unless specified below
-        composer-mode: [update]
-        os: [ubuntu-latest]
-
         # By default, the matrix
         # We define explicit includes, rather than using the matrix, since we have three possible variations
         # (PHP, PHPUnit, Symfony) and we want to specify which need to be to be explicit
@@ -29,28 +25,40 @@ jobs:
             phpunit-version: '8'
             symfony-version: '5.4'
             composer-mode: 'lowest'
+            os: 'ubuntu-latest'
 
           - php: '8.2'
             phpunit-version: '8'
             symfony-version: '5.4'
+            composer-mode: 'update'
+            os: 'ubuntu-latest'
 
           - php: '8.2'
             phpunit-version: '9'
             symfony-version: '6.4'
+            composer-mode: 'update'
+            os: 'ubuntu-latest'
 
           - php: '8.3'
             phpunit-version: '10'
             symfony-version: '7.4'
+            composer-mode: 'update'
+            os: 'ubuntu-latest'
 
           - php: '8.4'
             phpunit-version: '10'
             symfony-version: '8'
+            composer-mode: 'update'
+            os: 'ubuntu-latest'
 
           # On the highest supported PHPUnit / PHP version, leave symfony unspecified
           # This ensures that the build passes with only our own composer dependencies, not symfony/flex
           - php: '8.5'
             phpunit-version: '10'
             symfony-version: ''
+            composer-mode: 'update'
+            os: 'ubuntu-latest'
+
 
           # Test the highest supported versions on windows & macos
           # These do merit second jobs, in case the output varies between platforms
@@ -58,11 +66,14 @@ jobs:
             phpunit-version: '10'
             symfony-version: '8'
             os: 'windows-latest'
+            composer-mode: 'update'
+
 
           - php: '8.5'
             phpunit-version: '10'
             symfony-version: '8'
             os: 'macos-latest'
+            composer-mode: 'update'
 
     steps:
       - run: |
