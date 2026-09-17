@@ -27,9 +27,9 @@ jobs:
               // Highest supported symfony, PHP and PHPUnit version
             //  php: highestSupported(SUPPORTED_PHP_VERSIONS),
             //  os: 'ubuntu-latest',
-            //  composer-mode: 'update',
-            //  symfony-version: highestSupported(SUPPORTED_SYMFONY_VERSIONS),
-            //  phpunit-version: highestSupported(SUPPORTED_PHPUNIT_VERSIONS),
+            //  'composer-mode': 'update',
+            //  'symfony-version': highestSupported(SUPPORTED_SYMFONY_VERSIONS),
+            //  'phpunit-version': highestSupported(SUPPORTED_PHPUNIT_VERSIONS),
               includes: []
             };
 
@@ -38,9 +38,9 @@ jobs:
               matrix.includes.push({
                 php: phpVersion,
                 os: 'ubuntu-latest',
-                composer-mode: 'update',
-                symfony-version: HIGHEST_SYMFONY,
-                phpunit-version: HIGHEST_PHPUNIT,
+                'composer-mode': 'update',
+                'symfony-version': HIGHEST_SYMFONY,
+                'phpunit-version': HIGHEST_PHPUNIT,
               });
             }
 
@@ -49,9 +49,9 @@ jobs:
              matrix.includes.push({
                 php: HIGHEST_PHP,
                 os,
-                composer-mode: 'update',
-                symfony-version: HIGHEST_SYMFONY,
-                phpunit-version: HIGHEST_PHPUNIT,
+                'composer-mode': 'update',
+                'symfony-version': HIGHEST_SYMFONY,
+                'phpunit-version': HIGHEST_PHPUNIT,
               });
             }
 
@@ -59,10 +59,9 @@ jobs:
             matrix.includes.push({
                 php: SUPPORTED_PHP_VERSIONS[0],
                 os: 'ubuntu-latest',
-                composer-mode: 'lowest',
-                symfony-version: SUPPORTED_SYMFONY_VERSIONS[0],
-                phpunit-version: SUPPORTED_PHPUNIT_VERSIONS[0],
-              });
+                'composer-mode': 'lowest',
+                'symfony-version': SUPPORTED_SYMFONY_VERSIONS[0],
+                'phpunit-version': SUPPORTED_PHPUNIT_VERSIONS[0],
             });
 
             core.setOutput('matrix', JSON.stringify(matrix));
