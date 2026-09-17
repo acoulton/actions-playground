@@ -5,25 +5,77 @@ on:
     branches: "*"
 
 jobs:
+  compile-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.determine-matrix.outputs.matrix }}
+
+    steps:
+      - id: determine-matrix
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const SUPPORTED_PHP_VERSIONS = ['8.2', '8.3', '8.4', '8.5'];
+            const SUPPORTED_PHPUNIT_VERSIONS = ['8', '9', '10'];
+            const SUPPORTED_SYMFONY_VERSIONS = ['5.4', '6.4', '7.4', '8'];
+
+            const HIGHEST_PHP = SUPPORTED_PHP_VERSIONS[SUPPORTED_PHP_VERSIONS.length - 1];
+            const HIGHEST_PHPUNIT = SUPPORTED_PHPUNIT_VERSIONS[SUPPORTED_PHPUNIT_VERSIONS.length - 1];
+            const HIGHEST_SYMFONY = SUPPORTED_SYMFONY_VERSIONS[SUPPORTED_SYMFONY_VERSIONS.length - 1];
+
+            const matrix = {
+              // Highest supported symfony, PHP and PHPUnit version
+            //  php: highestSupported(SUPPORTED_PHP_VERSIONS),
+            //  os: 'ubuntu-latest',
+            //  composer-mode: 'update',
+            //  symfony-version: highestSupported(SUPPORTED_SYMFONY_VERSIONS),
+            //  phpunit-version: highestSupported(SUPPORTED_PHPUNIT_VERSIONS),
+              includes: []
+            };
+
+            // Then, the highest supported phpunit version on all other supported php versions
+            for (const phpVersion of SUPPORTED_PHP_VERSIONS) {
+              matrix.includes.push({
+                php: phpVersion,
+                os: 'ubuntu-latest',
+                composer-mode: 'update',
+                symfony-version: HIGHEST_SYMFONY,
+                phpunit-version: HIGHEST_PHPUNIT,
+              });
+            }
+
+            // The highest supported of all dependencies / PHP vers on macos and windows
+            for (const os of ['macos', 'windows']) {
+             matrix.includes.push({
+                php: HIGHEST_PHP,
+                os,
+                composer-mode: 'update',
+                symfony-version: HIGHEST_SYMFONY,
+                phpunit-version: HIGHEST_PHPUNIT,
+              });
+            }
+
+            // One job with the lowest-lowest of all deps
+            matrix.includes.push({
+                php: SUPPORTED_PHP_VERSIONS[0],
+                os: 'ubuntu-latest',
+                composer-mode: 'lowest',
+                symfony-version: SUPPORTED_SYMFONY_VERSIONS[0],
+                phpunit-version: SUPPORTED_PHPUNIT_VERSIONS[0],
+              });
+            });
+
+            core.setOutput('matrix', JSON.stringify(matrix));
+
   build:
     runs-on: ubuntu-latest
+    needs: compile-matrix
     strategy:
-      matrix:
-        php-version: [8.5]
-        composer-mode: [update]
-        phpunit-version: [8, 9, 10]
-
-        include:
-          - phpunit-version: 8
-            composer-mode: lowest
-            php-version: [8.2, 8.3, 8.4, 8.5]
-
-          - phpunit-version: 9
-            composer-mode: update
-            php-version: [8.4, 8.5]
+      matrix: ${{ fromJSON(needs.compile-matrix.outputs.matrix) }}
 
     steps:
       - run: |
           echo "PHP: ${{matrix.php-version}}"
           echo "PHPUnit: ${{matrix.phpunit-version}}"
+          echo "Symfony: ${{matrix.symfony-version}}"
           echo "Composer: ${{matrix.composer-mode}}"
