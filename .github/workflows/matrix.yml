@@ -1,0 +1,29 @@
+name: Push-playground
+
+on:
+  push:
+    branches: "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [8.5]
+        composer-mode: [update]
+        phpunit-version: [8, 9, 10]
+
+        include:
+          - phpunit-version: 8
+            composer-mode: lowest
+            php-version: [8.2, 8.3, 8.4, 8.5]
+
+          - phpunit-version: 9
+            composer-mode: update
+            php-version: [8.4, 8.5]
+
+    steps:
+      - run: |
+          echo "PHP: ${{matrix.php-version}}"
+          echo "PHPUnit: ${{matrix.phpunit-version}}"
+          echo "Composer: ${{matrix.composer-mode}}"
