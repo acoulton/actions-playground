@@ -1,0 +1,16 @@
+on: 
+  push:
+
+jobs:
+  disk-space:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04, ubuntu-slim, macos-latest]
+    steps:
+      - run: df -h
+      - run: mount
